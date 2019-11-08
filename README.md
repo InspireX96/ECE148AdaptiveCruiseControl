@@ -13,9 +13,9 @@ Follow the tutorials below to install ROS and setup catkin workspace:
 [http://wiki.ros.org/melodic/Installation/Ubuntu](http://wiki.ros.org/melodic/Installation/Ubuntu)<br>
 [http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment](http://wiki.ros.org/ROS/Tutorials/InstallingandConfiguringROSEnvironment)
 
-### Install RPLidar Ros Package
+### Install RPLidar ROS Package
 
-In order to communicate with RPLidar, we use the offical ROS package:
+In order to communicate with RPLidar, we use the offical RPLidar ROS package:
 
 [https://github.com/robopeak/rplidar_ros](https://github.com/robopeak/rplidar_ros)
 
