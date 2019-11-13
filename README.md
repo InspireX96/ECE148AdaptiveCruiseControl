@@ -55,7 +55,7 @@ timedatectl
 
 [https://answers.ros.org/question/190317/ros-cant-find-package/](https://answers.ros.org/question/190317/ros-cant-find-package/)
 
-### Error when running launching RPLidar publisher
+### Error when launching RPLidar publisher
 
 When running command `roslaunch rplidar_ros rplidar.launch`, this error message appears:
 
