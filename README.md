@@ -19,6 +19,10 @@ In order to communicate with RPLidar, we use the offical RPLidar ROS package:
 
 [https://github.com/robopeak/rplidar_ros](https://github.com/robopeak/rplidar_ros)
 
+Wiki page for this package is:
+
+[http://wiki.ros.org/rplidar](http://wiki.ros.org/rplidar)
+
 To install this package, ssh into jetson and clone the repo into `catkin_ws/src`:
 
 ```bash
