@@ -123,3 +123,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# PyCharm cache
+.idea/
+
+# ROS bag
+*.bag
