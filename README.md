@@ -32,3 +32,18 @@ Then build this package:
 cd ~/catkin_ws
 catkin_make
 ```
+
+## Notes
+
+1. Wrong date and time on Jetson
+
+This problem may cause `apt-get update` failure or `catkin_make` failure.
+
+[https://askubuntu.com/questions/929805/timedatectl-ntp-sync-cannot-set-to-yes]
+(https://askubuntu.com/questions/929805/timedatectl-ntp-sync-cannot-set-to-yes)
+
+```bash
+sudo service ntp stop
+sudo ntpd -gq
+timedatectl
+```
