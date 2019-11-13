@@ -35,15 +35,18 @@ catkin_make
 
 ## Notes
 
-1. Wrong date and time on Jetson
+### Wrong date and time on Jetson
 
 This problem may cause `apt-get update` failure or `catkin_make` failure.
 
-[https://askubuntu.com/questions/929805/timedatectl-ntp-sync-cannot-set-to-yes]
-(https://askubuntu.com/questions/929805/timedatectl-ntp-sync-cannot-set-to-yes)
+[https://askubuntu.com/questions/929805/timedatectl-ntp-sync-cannot-set-to-yes](https://askubuntu.com/questions/929805/timedatectl-ntp-sync-cannot-set-to-yes)
 
 ```bash
 sudo service ntp stop
 sudo ntpd -gq
 timedatectl
 ```
+
+### ROS cannot find package
+
+[https://answers.ros.org/question/190317/ros-cant-find-package/](https://answers.ros.org/question/190317/ros-cant-find-package/)
