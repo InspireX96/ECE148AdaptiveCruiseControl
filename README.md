@@ -54,3 +54,34 @@ timedatectl
 ### ROS cannot find package
 
 [https://answers.ros.org/question/190317/ros-cant-find-package/](https://answers.ros.org/question/190317/ros-cant-find-package/)
+
+### Error when running launching RPLidar publisher
+
+When running command `roslaunch rplidar_ros rplidar.launch`, this error message appears:
+
+*Error, cannot bind to the specified serial port /dev/ttyUSB0.*
+
+To solve this, we need to change the permission of ttyUSB0 by:
+
+```bash
+sudo chmod 666 /dev/ttyUSB0
+```
+
+
+### Rviz do not show LIDAR scan
+
+After running command ` ` and trying to visualize in Rviz, Rviz does not show LIDAR scan and throws error message: 
+
+*For frame [laser]: Fixed Frame [map] does not exist*
+
+This is because tranformation from world to lidar frame is not defined. You can publish it manually by:
+
+```bash
+rosrun tf static_transform_publisher 0 0 0 0 0 0 map laser 10
+```
+
+Alternatively, you can run this command instead:
+
+```bash
+roslaunch rplidar_ros view_rplidar.launch
+```
