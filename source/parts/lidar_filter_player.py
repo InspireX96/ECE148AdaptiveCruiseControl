@@ -1,7 +1,6 @@
 """
 A player to visualize LIDAR filters
 """
-import random
 import time
 import threading
 import rospy
@@ -36,36 +35,26 @@ def listener():
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
 
+
 def player():
-    ysample = random.sample(range(-50, 50), 100)
-
-    xdata = []
-    ydata = []
-
     plt.show()
 
-    axes = plt.gca()
-    axes.set_xlim(0, 100)
-    axes.set_ylim(-50, +50)
-    line, = axes.plot(xdata, ydata, 'r-')
-
     for i in range(100):
-        xdata.append(i)
-        ydata.append(ysample[i])
-        line.set_xdata(xdata)
-        line.set_ydata(ydata)
+        plt.cla()
+        plt.scatter(np.random.rand(10), np.random.rand(10))
         plt.draw()
         plt.pause(1e-17)
-        time.sleep(0.1)
 
 
 if __name__ == '__main__':
-    rospy.init_node('scan_listener', anonymous=True)  # init ROS node
-    # listener()
-    t1 = threading.Thread(target=listener)
-    t2 = threading.Thread(target=player)
-    t1.start()
-    t2.start()
-    t1.join()
-    t2.join()
+    # int ROS node
+    rospy.init_node('scan_listener', anonymous=True)  # ROS node has to be initialized in main thread
+
+    # spin two threads to receive LIDAR topic and draw animation simultaneously
+    threads = [threading.Thread(target=listener), threading.Thread(target=player)]
+    for t in threads:
+        t.start()
+
+    for t in threads:
+        t.join()
 
