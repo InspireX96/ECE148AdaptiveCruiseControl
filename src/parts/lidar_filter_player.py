@@ -1,7 +1,9 @@
 """
 A player to visualize LIDAR filters
+Please have LIDAR scan publisher ready before running this script
 """
-import time
+
+import copy
 import queue
 import threading
 import rospy
@@ -9,6 +11,8 @@ from sensor_msgs.msg import LaserScan
 
 import numpy as np
 from matplotlib import pyplot as plt
+
+from lidar_filters import angular_bounds_filter, range_filter, TemporalMedianFilter
 
 
 def callback(data, args):
@@ -18,7 +22,7 @@ def callback(data, args):
     :param args: arguments. arg[0] is queue
     """
     q = args[0]
-    q.put(data)     # put LIDAR msg in queue and get another thread to plot?
+    q.put(data)  # put LIDAR msg in queue and get another thread to plot?
 
 
 def listener(q):
@@ -26,14 +30,7 @@ def listener(q):
     Listener to receive LIDAR scans
     :param q: queue for multi-threading communication
     """
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
-    # rospy.init_node('scan_listener', anonymous=True)  # init ROS node
-
-    rospy.Subscriber('scan', LaserScan, callback, (q, ))  # subscribe
+    rospy.Subscriber('scan', LaserScan, callback, (q,))  # subscribe
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
@@ -43,8 +40,8 @@ def player(q):
     """
     Player to draw LIDAR scan animation
     :param q: queue for multi-threading communication
-    :return:
     """
+
     def _convert_lidar_msg_to_array(data):
         """
         Convert LIDAR ROS msg to np array
@@ -56,12 +53,12 @@ def player(q):
         ranges = np.array(ranges)
         return angles, ranges
 
-    plt.show()      # init figure
+    plt.show()  # initialize figure
 
     while True:
         # get LIDAR data
         try:
-            data = q.get(timeout=10)
+            data = q.get(timeout=5)
         except Exception as err:
             print('Timeout receiving LIDAR data: {}\n'
                   'This thread will stop automatically,\n'
@@ -69,12 +66,22 @@ def player(q):
             return
 
         # parse LIDAR data
-        angles, ranges = _convert_lidar_msg_to_array(data)
+        raw_angles, raw_ranges = _convert_lidar_msg_to_array(data)
 
-        plt.cla()
-        plt.polar(angles, ranges, 'r')
-        plt.polar(0.8*angles, 0.8*ranges, 'b')
-        plt.draw()
+        # apply angular bounds filter
+        angular_bounds_angles, angular_bounds_ranges = _convert_lidar_msg_to_array(
+            angular_bounds_filter(data, -np.pi / 4, np.pi / 4))
+
+        # plot
+        plt.cla()  # clear plot
+        plt.polar(raw_angles, raw_ranges, 'r')
+        plt.polar(angular_bounds_angles, angular_bounds_ranges, 'b')
+
+        ax = plt.gca()
+        ax.set_rlim(0, 5)  # fix polar plot radius
+        plt.legend(['1', '2'])  # set legend
+        plt.title('LIDAR Filter Player')  # set title
+        plt.draw()  # update plot
         plt.pause(1e-17)
         q.task_done()
 
@@ -85,13 +92,12 @@ if __name__ == '__main__':
 
     q = queue.Queue()
     # spin two threads to receive LIDAR topic and draw animation simultaneously
-    threads = [threading.Thread(target=listener, args=(q, )),
-               threading.Thread(target=player, args=(q, ))]
+    threads = [threading.Thread(target=listener, args=(q,)),
+               threading.Thread(target=player, args=(q,))]
     for t in threads:
         t.start()
 
-    print('Please hit Ctrl+C to quit LIDAR player')
+    print('Please hit Ctrl+C to quit LIDAR filter player')
     q.join()
     for t in threads:
         t.join()
-
