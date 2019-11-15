@@ -1,3 +1,4 @@
 # required python packages besides existing packages in donkey
 pyyaml
 rospkg
+ipdb
