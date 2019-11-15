@@ -48,7 +48,8 @@ This problem may cause `apt-get update` failure or `catkin_make` failure.
 ```bash
 sudo service ntp stop
 sudo ntpd -gq
-timedatectl
+sudo service ntp start
+timedatectl   # check if ntp is synchronized
 ```
 
 ### ROS cannot find package
