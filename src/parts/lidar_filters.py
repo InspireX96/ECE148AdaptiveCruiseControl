@@ -15,6 +15,8 @@ def angular_bounds_filter(scan, lower_angle, upper_angle):
     :param scan: LaserScan msg, LIDAR scan data
     :param lower_angle: float, lower angle bound of start angle of the scan (rad)
     :param upper_angle: float, upper angle bound of end angle of the scan (rad)
+    :return: LaserScan msg, LIDAR scan data.
+             NOTE: input data is already modified, this is just for usage convenience
     """
     assert lower_angle >= scan.angle_min
     assert upper_angle <= scan.angle_max
@@ -28,6 +30,7 @@ def angular_bounds_filter(scan, lower_angle, upper_angle):
     scan.angle_max = upper_angle
     scan.ranges = scan.ranges[scan_lower_index:scan_upper_index]
     scan.intensities = scan.intensities[scan_lower_index:scan_upper_index]
+    return scan
 
 
 def range_filter(scan, lower_range, upper_range):
@@ -40,6 +43,8 @@ def range_filter(scan, lower_range, upper_range):
     :param scan: LaserScan msg, LIDAR scan data
     :param lower_range: float, lower range threshold (m)
     :param upper_range: float, upper range threshold (m)
+    :return: LaserScan msg, LIDAR scan data.
+             NOTE: input data is already modified, this is just for usage convenience
     """
     assert upper_range >= lower_range >= 0
 
@@ -50,6 +55,7 @@ def range_filter(scan, lower_range, upper_range):
 
     # update scan msg
     scan.ranges = tuple(ranges)
+    return scan
 
 
 class TemporalMedianFilter(object):
@@ -76,6 +82,8 @@ class TemporalMedianFilter(object):
         NOTE: It will modify the scan msg reference in place
 
         :param scan: LaserScan msg, LIDAR scan data
+        :return: LaserScan msg, LIDAR scan data.
+                 NOTE: input data is already modified, this is just for usage convenience
         """
         ranges = np.array(scan.ranges)
 
@@ -91,3 +99,4 @@ class TemporalMedianFilter(object):
 
         # update scan msg
         scan.ranges = tuple(result_ranges)
+        return scan
