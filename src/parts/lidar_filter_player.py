@@ -101,7 +101,7 @@ def player(q, selected_filters):
 
         ax = plt.gca()
         ax.set_rlim(0, 5)  # fix polar plot radius
-        plt.legend(scan_data.keys())  # set legend
+        plt.legend(scan_data.keys(), bbox_to_anchor=(0.75, 1.15), loc=2)  # set legend
         plt.title('LIDAR Filter Player')  # set title
         plt.draw()  # update plot
         plt.pause(1e-17)
