@@ -3,13 +3,11 @@ Unit tests for LIDAR filters
 """
 
 import time
-import rospy
 import numpy as np
 
-from matplotlib import pyplot as plt
 from sensor_msgs.msg import LaserScan
 
-from lidar_filters import *
+from lidar_filters import angular_bounds_filter, range_filter, TemporalMedianFilter
 
 
 def test_angular_bounds_filter():
@@ -21,11 +19,9 @@ def test_angular_bounds_filter():
     num_readings = 20
     laser_frequency = 40
 
-    current_time = rospy.Time.now()
-
     scan = LaserScan()
 
-    scan.header.stamp = current_time
+    scan.header.stamp = 0
     scan.header.frame_id = 'laser_frame'
     scan.angle_min = 0
     scan.angle_max = num_readings
@@ -66,11 +62,9 @@ def test_range_filter():
     num_readings = 20
     laser_frequency = 40
 
-    current_time = rospy.Time.now()
-
     scan = LaserScan()
 
-    scan.header.stamp = current_time
+    scan.header.stamp = 0
     scan.header.frame_id = 'laser_frame'
     scan.angle_min = -1.57
     scan.angle_max = 1.57
@@ -115,11 +109,9 @@ def test_temporal_median_filter():
         num_readings = len(ranges)
         laser_frequency = 40
 
-        current_time = rospy.Time.now()
-
         scan = LaserScan()
 
-        scan.header.stamp = current_time
+        scan.header.stamp = 0
         scan.header.frame_id = 'laser_frame'
         scan.angle_min = -1.57
         scan.angle_max = 1.57
@@ -173,11 +165,9 @@ def test_filter_stress_test():
     num_readings = 100
     laser_frequency = 40
 
-    current_time = rospy.Time.now()
-
     scan = LaserScan()
 
-    scan.header.stamp = current_time
+    scan.header.stamp = 0
     scan.header.frame_id = 'laser_frame'
     scan.angle_min = -1.57
     scan.angle_max = 1.57
@@ -220,7 +210,7 @@ def test_filter_stress_test():
 
 
 if __name__ == '__main__':
-    rospy.init_node('test_lidar_filters', anonymous=True)  # init ROS node
+    print('Testing LIDAR filters')
 
     test_angular_bounds_filter()
     test_range_filter()
