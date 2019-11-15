@@ -56,6 +56,11 @@ timedatectl   # check if ntp is synchronized
 
 [https://answers.ros.org/question/190317/ros-cant-find-package/](https://answers.ros.org/question/190317/ros-cant-find-package/)
 
+```bash
+cd ~/catkin_ws
+source devel/setup.bash
+```
+
 ### Error when launching RPLidar publisher
 
 When running command `roslaunch rplidar_ros rplidar.launch`, this error message appears:
