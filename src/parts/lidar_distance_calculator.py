@@ -1,7 +1,6 @@
 """
 Calculate closed object distance from LIDAR scans
 """
-import logging
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -16,6 +15,11 @@ def calculate_closest_object_distance(scan, debug=False):
     :return: float, closest object distance
     """
     ranges = np.array(scan.ranges)
+    mask = np.logical_and(ranges >= 0, ranges < np.finfo(np.float64).max)
+    if False in mask:
+        print('WARNING: invalid range values (negative of infinite value) in input LIDAR scan'
+              'These values will be deleted, but please consider applying range filter first')
+        ranges = ranges[mask]
 
     # histogram filter
     hist = plt.hist(ranges, bins='auto')
@@ -24,9 +28,8 @@ def calculate_closest_object_distance(scan, debug=False):
     if debug:
         plt.plot([distance, distance], [0, np.max(hist[0])])
         plt.title('Calculated Distance: {}'.format(distance))
-        plt.waitforbuttonpress(1)
+        plt.waitforbuttonpress(2)
         plt.draw()
         plt.close()
 
-    logging.info('hist: {}, distance: {}'.format(hist, distance))
     return distance

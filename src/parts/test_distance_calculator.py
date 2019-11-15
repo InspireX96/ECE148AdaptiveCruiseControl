@@ -45,6 +45,7 @@ def test_distance_calculator_with_constant_distance():
     # test
     distance = calculate_closest_object_distance(scan, debug=True)
     print("Got distance: ", distance)
+    assert distance == 1
 
 
 def test_distance_calculator_with_binary_valued_distance():
@@ -59,6 +60,7 @@ def test_distance_calculator_with_binary_valued_distance():
     # test
     distance = calculate_closest_object_distance(scan, debug=True)
     print("Got distance: ", distance)
+    assert distance == 1
 
 
 def test_distance_calculator_with_uniform_sampled_distance():
@@ -73,6 +75,7 @@ def test_distance_calculator_with_uniform_sampled_distance():
     # test
     distance = calculate_closest_object_distance(scan, debug=True)
     print("Got distance: ", distance)
+    assert 0.5 < distance <= 0.75
 
 
 def test_distance_calculator_with_gaussian_sampled_distance():
@@ -87,6 +90,7 @@ def test_distance_calculator_with_gaussian_sampled_distance():
     # test
     distance = calculate_closest_object_distance(scan, debug=True)
     print("Got distance: ", distance)
+    assert 0.65 < distance <= 0.9
 
 
 def test_distance_calculator_with_inverse_gaussian_sampled_distance():
@@ -101,6 +105,7 @@ def test_distance_calculator_with_inverse_gaussian_sampled_distance():
     # test
     distance = calculate_closest_object_distance(scan, debug=True)
     print("Got distance: ", distance)
+    assert 0 < distance <= 0.5
 
 
 if __name__ == '__main__':

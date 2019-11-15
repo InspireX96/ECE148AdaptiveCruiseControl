@@ -13,6 +13,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from lidar_filters import angular_bounds_filter, range_filter, TemporalMedianFilter
+from lidar_distance_calculator import calculate_closest_object_distance
 
 
 def callback(data, args):
@@ -44,7 +45,7 @@ def player(q, selected_filters):
                              E.g., selected_filters = ['angular_bounds_filter', 'temporal_median_filter']
     """
     for selected_filter in selected_filters:
-        assert selected_filter in ['angular_bounds_filter', 'range_filter', 'temporal_median_filter']
+        assert selected_filter in ['angular_bounds_filter', 'range_filter', 'temporal_median_filter', 'distance_calculator']
 
     def _convert_lidar_msg_to_array(data):
         """
@@ -87,6 +88,10 @@ def player(q, selected_filters):
         if 'temporal_median_filter' in selected_filters:
             scan_data['temporal_median_filter'] = _convert_lidar_msg_to_array(temporal_median_filter(data))
 
+        # apply distance calculator
+        if 'distance_calculator' in selected_filters:
+            scan_data['distance_calculator'] = (np.linspace(0, 2*np.pi, 360), calculate_closest_object_distance(data) * np.ones(360))   # TODO
+
         # plot
         plt.cla()  # clear plot
         for angles, ranges in scan_data.values():
@@ -106,7 +111,7 @@ if __name__ == '__main__':
     rospy.init_node('scan_listener', anonymous=True)  # ROS node has to be initialized in main thread
 
     # select filters
-    selected_filters = ['angular_bounds_filter', 'temporal_median_filter']     # TODO: select filter
+    selected_filters = ['angular_bounds_filter', 'range_filter', 'temporal_median_filter', 'distance_calculator']     # TODO: select filter
 
     q = queue.Queue()
     # spin two threads to receive LIDAR topic and draw animation simultaneously
