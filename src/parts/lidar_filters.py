@@ -100,3 +100,13 @@ class TemporalMedianFilter(object):
         # update scan msg
         scan.ranges = tuple(result_ranges)
         return scan
+
+    def __call__(self, scan):
+        """
+        Same as calling function filter()
+
+        :param scan: LaserScan msg, LIDAR scan data
+        :return: LaserScan msg, LIDAR scan data.
+                 NOTE: input data is already modified, this is just for usage convenience
+        """
+        return self.filter(scan)

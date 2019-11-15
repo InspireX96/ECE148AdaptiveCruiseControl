@@ -36,11 +36,15 @@ def listener(q):
     rospy.spin()
 
 
-def player(q):
+def player(q, selected_filters):
     """
     Player to draw LIDAR scan animation
     :param q: queue for multi-threading communication
+    :param selected_filters: list, list of string indicating selected filters.
+                             E.g., selected_filters = ['angular_bounds_filter', 'temporal_median_filter']
     """
+    for selected_filter in selected_filters:
+        assert selected_filter in ['angular_bounds_filter', 'range_filter', 'temporal_median_filter']
 
     def _convert_lidar_msg_to_array(data):
         """
@@ -54,6 +58,7 @@ def player(q):
         return angles, ranges
 
     plt.show()  # initialize figure
+    temporal_median_filter = TemporalMedianFilter(k=3)  # initialize temporal median filter
 
     while True:
         # get LIDAR data
@@ -66,20 +71,30 @@ def player(q):
             return
 
         # parse LIDAR data
-        raw_angles, raw_ranges = _convert_lidar_msg_to_array(data)
+        scan_data = {'raw_input': _convert_lidar_msg_to_array(data)}  # place holder for scans
 
+        # NOTE: filters are cascaded
         # apply angular bounds filter
-        angular_bounds_angles, angular_bounds_ranges = _convert_lidar_msg_to_array(
-            angular_bounds_filter(data, -np.pi / 4, np.pi / 4))
+        if 'angular_bounds_filter' in selected_filters:
+            scan_data['angular_bounds_filter'] = _convert_lidar_msg_to_array(
+                angular_bounds_filter(data, -np.pi / 4, np.pi / 4))
+
+        # apply range filter
+        if 'range_filter' in selected_filters:
+            scan_data['range_filter'] = _convert_lidar_msg_to_array(range_filter(data, 0, 5))
+
+        # apply temporal median filter
+        if 'temporal_median_filter' in selected_filters:
+            scan_data['temporal_median_filter'] = _convert_lidar_msg_to_array(temporal_median_filter(data))
 
         # plot
         plt.cla()  # clear plot
-        plt.polar(raw_angles, raw_ranges, 'r')
-        plt.polar(angular_bounds_angles, angular_bounds_ranges, 'b')
+        for angles, ranges in scan_data.values():
+            plt.polar(angles, ranges)  # plot LIDAR scans
 
         ax = plt.gca()
         ax.set_rlim(0, 5)  # fix polar plot radius
-        plt.legend(['1', '2'])  # set legend
+        plt.legend(scan_data.keys())  # set legend
         plt.title('LIDAR Filter Player')  # set title
         plt.draw()  # update plot
         plt.pause(1e-17)
@@ -90,10 +105,13 @@ if __name__ == '__main__':
     # init ROS node
     rospy.init_node('scan_listener', anonymous=True)  # ROS node has to be initialized in main thread
 
+    # select filters
+    selected_filters = ['angular_bounds_filter', 'temporal_median_filter']     # TODO: select filter
+
     q = queue.Queue()
     # spin two threads to receive LIDAR topic and draw animation simultaneously
     threads = [threading.Thread(target=listener, args=(q,)),
-               threading.Thread(target=player, args=(q,))]
+               threading.Thread(target=player, args=(q, selected_filters))]
     for t in threads:
         t.start()
 
