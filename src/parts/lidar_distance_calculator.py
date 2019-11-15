@@ -28,7 +28,7 @@ def calculate_closest_object_distance(scan, debug=False):
     if debug:
         plt.plot([distance, distance], [0, np.max(hist[0])])
         plt.title('Calculated Distance: {}'.format(distance))
-        plt.waitforbuttonpress(2)
+        plt.waitforbuttonpress(1.5)
         plt.draw()
         plt.close()
 

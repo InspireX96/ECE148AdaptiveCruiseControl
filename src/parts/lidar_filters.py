@@ -18,8 +18,7 @@ def angular_bounds_filter(scan, lower_angle, upper_angle):
     :return: LaserScan msg, LIDAR scan data.
              NOTE: input data is already modified, this is just for usage convenience
     """
-    assert lower_angle >= scan.angle_min
-    assert upper_angle <= scan.angle_max
+    assert lower_angle < upper_angle
 
     # calculate lower and upper index
     scan_lower_index = int((lower_angle - scan.angle_min) // scan.angle_increment)

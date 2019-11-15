@@ -45,7 +45,8 @@ def player(q, selected_filters):
                              E.g., selected_filters = ['angular_bounds_filter', 'temporal_median_filter']
     """
     for selected_filter in selected_filters:
-        assert selected_filter in ['angular_bounds_filter', 'range_filter', 'temporal_median_filter', 'distance_calculator']
+        assert selected_filter in ['angular_bounds_filter', 'range_filter', 'temporal_median_filter',
+                                   'distance_calculator']
 
     def _convert_lidar_msg_to_array(data):
         """
@@ -78,7 +79,7 @@ def player(q, selected_filters):
         # apply angular bounds filter
         if 'angular_bounds_filter' in selected_filters:
             scan_data['angular_bounds_filter'] = _convert_lidar_msg_to_array(
-                angular_bounds_filter(data, -np.pi / 4, np.pi / 4))
+                angular_bounds_filter(data, np.pi + -np.pi/4, np.pi + np.pi/4))  # TODO: change angular bound here
 
         # apply range filter
         if 'range_filter' in selected_filters:
@@ -90,7 +91,8 @@ def player(q, selected_filters):
 
         # apply distance calculator
         if 'distance_calculator' in selected_filters:
-            scan_data['distance_calculator'] = (np.linspace(0, 2*np.pi, 360), calculate_closest_object_distance(data) * np.ones(360))   # TODO
+            scan_data['distance_calculator'] = (
+                np.linspace(0, 2 * np.pi, 360), calculate_closest_object_distance(data) * np.ones(360))  # TODO
 
         # plot
         plt.cla()  # clear plot
@@ -111,7 +113,8 @@ if __name__ == '__main__':
     rospy.init_node('scan_listener', anonymous=True)  # ROS node has to be initialized in main thread
 
     # select filters
-    selected_filters = ['angular_bounds_filter', 'range_filter', 'temporal_median_filter', 'distance_calculator']     # TODO: select filter
+    selected_filters = ['angular_bounds_filter', 'range_filter', 'temporal_median_filter',
+                        'distance_calculator']  # TODO: select filter
 
     q = queue.Queue()
     # spin two threads to receive LIDAR topic and draw animation simultaneously
