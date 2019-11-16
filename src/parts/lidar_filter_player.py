@@ -79,7 +79,7 @@ def player(q, selected_filters):
         # apply angular bounds filter
         if 'angular_bounds_filter' in selected_filters:
             scan_data['angular_bounds_filter'] = _convert_lidar_msg_to_array(
-                angular_bounds_filter(data, np.pi + -np.pi/4, np.pi + np.pi/4))  # TODO: change angular bound here
+                angular_bounds_filter(data, np.pi + -np.pi / 4, np.pi + np.pi / 4))  # TODO: change angular bound here
 
         # apply range filter
         if 'range_filter' in selected_filters:
@@ -117,13 +117,15 @@ if __name__ == '__main__':
                         'distance_calculator']  # TODO: select filter
 
     q = queue.Queue()
-    # spin two threads to receive LIDAR topic and draw animation simultaneously
-    threads = [threading.Thread(target=listener, args=(q,)),
-               threading.Thread(target=player, args=(q, selected_filters))]
-    for t in threads:
-        t.start()
+    # spin thread to receive LIDAR topic and draw animation simultaneously
+    t = threading.Thread(target=listener, args=(q,))
+    t.start()
+
+    # main thread for LIDAR filter player
+    player(q, selected_filters)
 
     print('Please hit Ctrl+C to quit LIDAR filter player')
+
+    # join threads
     q.join()
-    for t in threads:
-        t.join()
+    t.join()
