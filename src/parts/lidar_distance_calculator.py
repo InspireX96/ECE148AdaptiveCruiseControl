@@ -17,7 +17,7 @@ def calculate_closest_object_distance(scan, debug=False):
     ranges = np.array(scan.ranges)
     if (ranges <= 0).any() or np.inf in ranges:
         mask = np.logical_and(ranges >= 0, ranges < np.finfo(np.float64).max)
-    # if False in mask:
+        # if False in mask:
         print('WARNING: invalid range values (negative of infinite value) in input LIDAR scan'
               'These values will be deleted, but please consider applying range filter first')
         ranges = ranges[mask]

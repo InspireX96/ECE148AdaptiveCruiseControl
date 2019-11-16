@@ -121,7 +121,7 @@ def test_distance_calculator_with_invalid_distance():
     # test
     distance = calculate_closest_object_distance(scan, debug=True)
     print("Got distance: ", distance)
-    assert 0 <+ distance < np.inf
+    assert 0 < + distance < np.inf
 
 
 def test_distance_calculator_stress_test():
