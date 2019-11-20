@@ -11,18 +11,23 @@ class CruiseController(object):
     The cruise controller takes distance as input and calculate throttle to keep distance constant
     """
 
-    def __init__(self, default_distance=0.5):
+    def __init__(self, kp=1, kd=1.5, default_distance=0.5):
         """
         Constructor of CruiseController
+        :param kp: float, proportional gain, defaults to 1
+        :param kd: float, differential gain, defaults to 1.5
         :param default_distance: float, default distance to keep, defaults to 0.5 (m)
         """
+        # controller parameters
+        self.kp = kp
+        self.kd = kd
+        # controller settings
         self.default_distance = default_distance
 
         self.throttle = 0
         self.last_throttle = 0
         self.last_distance = 0
         self.time_step = 0.05
-        self.violence_scale = 1.5   # TODO: tune parameter
         self.error = 0
         self.throttle_change = 0.25
         self.error_high_threshold = 0.1
@@ -38,10 +43,9 @@ class CruiseController(object):
         :param distance: float, distance
         :return: float, throttle
         """
-        # calculate distance error
-        # TODO: PID?
+        # calculate distance error using PD controller
         # TODO: set timer
-        self.error = distance - self.default_distance + self.violence_scale * (distance -
+        self.error = self.kp * (distance - self.default_distance) + self.kd * (distance -
                                                                                self.last_distance) / self.time_step
 
         # change throttle if error is beyond threshold
@@ -49,14 +53,13 @@ class CruiseController(object):
             self.throttle += self.error * self.throttle_change
 
         # clip throttle
-        # TODO: tanh to smooth out?
         self.throttle = np.clip(self.throttle, self.min_throttle, self.max_throttle)
 
         # update memory
         self.last_distance = distance
         self.last_throttle = self.throttle
 
-        print('Throttle before clip: ', self.throttle)
+        logging.info('Output throttle: {}', self.throttle)
 
         return self.throttle
 

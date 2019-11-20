@@ -25,7 +25,7 @@ def _toy_scan_initializer():
     scan.angle_min = - np.pi / 4
     scan.angle_max = np.pi / 4
     scan.angle_increment = 1.0
-    scan.time_increment = (1.0 / laser_frequency) / (num_readings)
+    scan.time_increment = (1.0 / laser_frequency) / num_readings
     scan.range_min = 0.0
     scan.range_max = 10.0
 
@@ -140,7 +140,7 @@ def test_distance_calculator_stress_test():
     scan.angle_min = -1.57
     scan.angle_max = 1.57
     scan.angle_increment = 3.14 / num_readings
-    scan.time_increment = (1.0 / laser_frequency) / (num_readings)
+    scan.time_increment = (1.0 / laser_frequency) / num_readings
     scan.range_min = 0.0
     scan.range_max = 100.0
 

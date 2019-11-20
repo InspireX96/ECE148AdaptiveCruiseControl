@@ -57,7 +57,7 @@ def test_cruise_controller_with_constant_default_distance():
     print('\n===== Testing with constant default distance =====\n')
     default_distance = 0.5
 
-    cruise_controller = CruiseController(default_distance)
+    cruise_controller = CruiseController(default_distance=default_distance)
 
     distance_list = [default_distance] * int(1 / cruise_controller.time_step)
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list)
@@ -74,13 +74,13 @@ def test_cruise_controller_with_constant_non_default_distance():
     print('\n===== Testing with constant non default distance =====\n')
     default_distance = 0.5
 
-    cruise_controller = CruiseController(default_distance)
+    cruise_controller = CruiseController(default_distance=default_distance)
     distance_list = [2 * default_distance] * int(1 / cruise_controller.time_step)
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list)
     print('Throttle list: ', throttle_list)
     print('Error list: ', error_list)
 
-    cruise_controller = CruiseController(default_distance)
+    cruise_controller = CruiseController(default_distance=default_distance)
 
     distance_list = [0.5 * default_distance] * int(1 / cruise_controller.time_step)
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list)
@@ -96,7 +96,7 @@ def test_cruise_controller_with_increasing_to_default_distance():
     print('\n===== Testing with increasing to default distance =====\n')
     default_distance = 0.5
 
-    cruise_controller = CruiseController()
+    cruise_controller = CruiseController(default_distance=default_distance)
 
     x = np.linspace(-10, 10, int(1 / cruise_controller.time_step))
     distance_list = 1/(1 + np.exp(-x)) * default_distance
@@ -113,7 +113,7 @@ def test_cruise_controller_with_decreasing_to_default_distance():
     print('\n===== Testing with decreasing to default distance =====\n')
     default_distance = 0.5
 
-    cruise_controller = CruiseController()
+    cruise_controller = CruiseController(default_distance=default_distance)
 
     x = np.linspace(-10, 10, int(1 / cruise_controller.time_step))
     distance_list = 1/(1 + np.exp(-x)) * default_distance
@@ -131,7 +131,7 @@ def test_cruise_controller_with_constant_sin_wave_distance():
     print('\n===== Testing with constant sin wave distance =====\n')
     default_distance = 0.5
 
-    cruise_controller = CruiseController(default_distance)
+    cruise_controller = CruiseController(default_distance=default_distance)
     distance_list = [default_distance * np.sin(i / 20) + 0.5 for i in range(int(10 / cruise_controller.time_step))]
 
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list)
