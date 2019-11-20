@@ -62,7 +62,7 @@ class LidarProcessor(object):
         :return: LaserScan msg, filtered LIDAR scan data
         """
         # TODO: check filter parameters
-        scan = angular_bounds_filter(scan, np.pi + -np.pi / 4, np.pi + np.pi / 4)
+        scan = angular_bounds_filter(scan, np.pi - np.pi / 6, np.pi + np.pi / 6)
         scan = range_filter(scan, 0, 5)
         scan = self.temporal_median_filter(scan)
         return scan

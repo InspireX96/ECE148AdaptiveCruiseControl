@@ -7,8 +7,7 @@ import matplotlib.pyplot as plt
 
 def calculate_closest_object_distance(scan, debug=False):
     """
-    This function will apply a histogram filter on LIDAR scan to remove possible noise,
-    then calculated the object distance.
+    This function calculates object distance from given LIDAR scan.
 
     :param scan: LaserScan msg, LIDAR scan data
     :param debug: bool, flag to show debug plots
@@ -23,13 +22,12 @@ def calculate_closest_object_distance(scan, debug=False):
         ranges = ranges[mask]
 
     # histogram filter
-    if debug:
-        hist = plt.hist(ranges, bins='auto')
-    else:
-        hist = np.histogram(ranges, bins='auto')
-    distance = np.mean(ranges[np.logical_and(ranges >= hist[1][0], ranges <= hist[1][1])])
+    distance = np.min(ranges)   # simple method works better
+    # hist = np.histogram(ranges, bins='auto')
+    # distance = np.mean(ranges[np.logical_and(ranges >= hist[1][0], ranges <= hist[1][1])])
 
     if debug:
+        hist = plt.hist(ranges, bins='auto')
         plt.plot([distance, distance], [0, np.max(hist[0])])
         plt.title('Calculated Distance: {}'.format(distance))
         plt.waitforbuttonpress(1.5)
