@@ -12,8 +12,8 @@ from sensor_msgs.msg import LaserScan
 import numpy as np
 from matplotlib import pyplot as plt
 
-from lidar_filters import angular_bounds_filter, range_filter, TemporalMedianFilter
-from lidar_distance_calculator import calculate_closest_object_distance
+from parts.lidar_filters import angular_bounds_filter, range_filter, TemporalMedianFilter
+from parts.lidar_distance_calculator import calculate_closest_object_distance
 
 
 def callback(data, args):
