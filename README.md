@@ -78,6 +78,7 @@ If you get some error messages here, please refer to the last section
 Now it's time to run the vehicle!
 
 ```bash
+cd ~/projects/d3
 python manage_modified.py drive
 ```
 
