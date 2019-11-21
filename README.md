@@ -1,4 +1,4 @@
-# ECE148 Adaptive Cruise Control
+# ECE148 Adaptive Cruise Control [![Build Status](https://travis-ci.org/InspireX96/ECE148AdaptiveCruiseControl.svg?branch=master)](https://travis-ci.org/InspireX96/ECE148AdaptiveCruiseControl)
 
 ECE 148 FA19 Team 7 Project: adaptive cruise control on autonomous driving RC car.
 
@@ -71,7 +71,7 @@ Use the launch file in RPLidar ROS package to turn on the LIDAR.
 roslaunch rplidar_ros rplidar.launch
 ```
 
-If you get some error messages here, please refer to the last section
+If you get some error messages here, please refer to the **Notes** section
 
 ### Run the vehicle
 
@@ -82,39 +82,27 @@ cd ~/projects/d3
 python manage_modified.py drive
 ```
 
-## Disclaimer
+## LIDAR Filter Player App
 
-Travis CI with ROS utilizes `.travis.yml` from [https://github.com/felixduvallet/ros-travis-integration.git](https://github.com/felixduvallet/ros-travis-integration.git)
+To visualize different LIDAR filters and LIDAR distance calculaor, you can run `lidar_filter_player.py`.
 
+Before running this script, please make sure ROS is publishing LIDAR scans, so you can visualize them in real time.
+
+
+## Tests
+
+You can manually run unit tests of this package. Please install the `setup.py` in order to let *pytest* find this package on your computer. You can setup using *pip*:
+
+```bash
+pip install -e .
 ```
-Copyright (c) 2016, Felix Duvallet
-All rights reserved.
 
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+Then run the unit tests:
 
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
-
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
-
-* Neither the name of this package nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```bash
+pytest -v
 ```
+
 
 ## Notes
 
@@ -170,3 +158,38 @@ Alternatively, you can run this command instead:
 ```bash
 roslaunch rplidar_ros view_rplidar.launch
 ```
+
+## Disclaimer
+
+Travis CI with ROS utilizes `.travis.yml` sections from from [https://github.com/felixduvallet/ros-travis-integration.git](https://github.com/felixduvallet/ros-travis-integration.git)
+
+```
+Copyright (c) 2016, Felix Duvallet
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* Neither the name of this package nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```
+
