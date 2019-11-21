@@ -77,7 +77,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
     # add cruise controller
     cruise_controller = CruiseController(kp=1, kd=1.5, default_distance=0.5, throttle_scale=cfg.JOYSTICK_MAX_THROTTLE,
                                          debug=True)  # TODO: disable debug mode
-    V.add(cruise_controller, inputs=['lidar/distance'], outputs=['cc/throttle'])
+    V.add(cruise_controller, inputs=['lidar/distance', 'user/throttle'], outputs=['acc/throttle'], threaded=False)
 
     # TODO: autopilot
     # TODO: load model
@@ -92,20 +92,23 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
                 user_angle, user_throttle,
                 pilot_angle, pilot_throttle):
             # TODO: add adaptive CC throttle here
+            # NOTE: pilot_throttle is now handled by ACC
             if mode == 'user':
+                print('Using user angle and throttle')
                 return user_angle, user_throttle
 
             elif mode == 'local_angle':
-                logging.error('Autopilot not implemented!')
-                return pilot_angle, user_throttle
+                print('Using user angle and ACC throttle')
+                return user_angle, pilot_throttle
 
             else:
-                logging.error('Autopilot not implemented!')
-                return pilot_angle, pilot_throttle * cfg.AI_THROTTLE_MULT
+                logging.warning('Autopilot not implemented!')
+                return user_angle, user_throttle
+                # return pilot_angle, pilot_throttle * cfg.AI_THROTTLE_MULT
 
     V.add(DriveMode(),
           inputs=['user/mode', 'user/angle', 'user/throttle',
-                  'pilot/angle', 'pilot/throttle'],
+                  'pilot/angle', 'acc/throttle'],
           outputs=['angle', 'throttle'])
 
     # setup drive train

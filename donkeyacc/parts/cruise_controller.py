@@ -40,16 +40,19 @@ class CruiseController(object):
         self.max_throttle = 1   # TODO: change max throttle by user input
         self.min_throttle = -1
 
-    def run(self, distance):
+    def run(self, distance, user_throttle=None):
         """
         Run as a non-threaded script.
         Input distance, output throttle
 
         :param distance: float, distance
+        :param user_throttle: user input throttle to adjust controller, defaults to None
         :return: float, throttle
         """
         # calculate distance error using PD controller
         # TODO: set timer
+        if user_throttle is not None:
+            print('user_throttle: ', user_throttle)  # TODO: delete
         self.error = self.kp * (distance - self.default_distance) + self.kd * (distance -
                                                                                self.last_distance) / self.time_step
 
