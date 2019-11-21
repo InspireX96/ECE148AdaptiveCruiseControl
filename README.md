@@ -121,7 +121,7 @@ sudo chmod 666 /dev/ttyUSB0
 
 ### Rviz do not show LIDAR scan
 
-After running command ` ` and trying to visualize in Rviz, Rviz does not show LIDAR scan and throws error message: 
+After running command `roslaunch rplidar_ros rplidar.launch` and trying to visualize in Rviz, Rviz does not show LIDAR scan and throws error message: 
 
 *For frame [laser]: Fixed Frame [map] does not exist*
 
