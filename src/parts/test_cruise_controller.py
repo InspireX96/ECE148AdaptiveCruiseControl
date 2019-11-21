@@ -114,7 +114,7 @@ def test_cruise_controller_with_increasing_to_default_distance():
     cruise_controller = CruiseController(default_distance=default_distance)
 
     x = np.linspace(-10, 10, int(1 / cruise_controller.time_step))
-    distance_list = 1/(1 + np.exp(-x)) * default_distance
+    distance_list = 1 / (1 + np.exp(-x)) * default_distance
 
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list)
     print('Throttle list: ', throttle_list)
@@ -137,7 +137,7 @@ def test_cruise_controller_with_decreasing_to_default_distance():
     cruise_controller = CruiseController(default_distance=default_distance)
 
     x = np.linspace(-10, 10, int(1 / cruise_controller.time_step))
-    distance_list = 1/(1 + np.exp(-x)) * default_distance
+    distance_list = 1 / (1 + np.exp(-x)) * default_distance
     distance_list = distance_list[::-1]
 
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list)
@@ -179,12 +179,29 @@ def test_cruise_controller_set_throttle_scale():
     print('\n===== Testing setting throttle scale with random distance =====\n')
     default_distance = 0.5
     for throttle_scale in [0.2, 0.5, 0.75]:
-        cruise_controller = CruiseController(default_distance=default_distance, throttle_scale=throttle_scale, debug=True)
+        cruise_controller = CruiseController(default_distance=default_distance, throttle_scale=throttle_scale,
+                                             debug=True)
         distance_list = np.random.rand(int(1 / cruise_controller.time_step))
 
         throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list)
 
         assert np.max(np.abs(throttle_list)) <= throttle_scale
+
+
+def test_cruise_controller_stress_test():
+    """
+    Stress test of cruise controller and speed check
+    """
+    print('\n====== Stress test ======\n')
+    cruise_controller = CruiseController()
+    distance_mat = np.random.random((100, int(1 / cruise_controller.time_step)))
+    time_start = time.time()
+    for i, distance_list in enumerate(distance_mat):
+        for distance in distance_list:
+            cruise_controller.run(distance)
+    time_end = time.time()
+    print('*** Cruise controller run time: {} sec over {} runs with distance array len = {}, FPS = {} ***' \
+          .format(time_end - time_start, i + 1, distance_mat.shape[1], ((i + 1) / (time_end - time_start))))
 
 
 if __name__ == '__main__':
@@ -195,4 +212,6 @@ if __name__ == '__main__':
     test_cruise_controller_with_decreasing_to_default_distance()
     test_cruise_controller_with_constant_sin_wave_distance()
     test_cruise_controller_set_throttle_scale()
+    test_cruise_controller_stress_test()
     print('All tests passed')
+

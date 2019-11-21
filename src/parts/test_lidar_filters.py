@@ -205,16 +205,13 @@ def test_filter_stress_test():
         temporal_median_filter.filter(scan)
     time_end = time.time()
     print('*** Temporal median filter run time: {} sec over {} runs, FPS = {} ***'.format(time_end - time_start, i + 1,
-                                                                                          ((i + 1) / (
-                                                                                                      time_end - time_start))))
+          ((i + 1) / (time_end - time_start))))
 
 
 if __name__ == '__main__':
     print('Testing LIDAR filters')
-
     test_angular_bounds_filter()
     test_range_filter()
     test_temporal_median_filter()
     test_filter_stress_test()
-
     print('All tests passed')

@@ -155,8 +155,8 @@ def test_distance_calculator_stress_test():
     for i in range(100):
         calculate_closest_object_distance(scan)
     time_end = time.time()
-    print('*** Angular filter run time: {} sec over {} runs, FPS = {} ***'.format(time_end - time_start, i + 1,
-                                                                                  ((i + 1) / (time_end - time_start))))
+    print('*** Distance calculator run time: {} sec over {} runs, FPS = {} ***'.format(time_end - time_start, i + 1,
+          ((i + 1) / (time_end - time_start))))
 
 
 if __name__ == '__main__':
@@ -168,5 +168,4 @@ if __name__ == '__main__':
     test_distance_calculator_with_inverse_gaussian_sampled_distance()
     test_distance_calculator_with_invalid_distance()
     test_distance_calculator_stress_test()
-
     print('All tests passed')
