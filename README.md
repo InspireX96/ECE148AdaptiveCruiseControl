@@ -56,7 +56,7 @@ pip install -r requirements.txt   # NOTE: you may need to run this command in su
 
 ### Setup
 
-To setup this project on top of exisiting donkey framework, simply run command:
+To setup this project on top of existing donkey framework, simply run command:
 
 ```bash
 cd src
