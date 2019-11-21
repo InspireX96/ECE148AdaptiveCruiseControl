@@ -37,6 +37,51 @@ cd ~/catkin_ws
 catkin_make
 ```
 
+## Run the Codes
+
+### Clone this repo
+```bash
+cd ~/projects
+git clone https://github.com/InspireX96/ECE148AdaptiveCruiseControl.git
+```
+
+### Install required python packages
+
+Install required python packages in addition to packages in donkeycar framework
+
+```bash
+cd ECE148AdaptiveCruiseControl
+pip install -r requirements.txt   # NOTE: you may need to run this command in sudo
+```
+
+### Setup
+
+To setup this project on top of exisiting donkey framework, simply run command:
+
+```bash
+cd src
+./setup.sh
+```
+
+### Turn on RPLidar
+
+Use the launch file in RPLidar ROS package to turn on the LIDAR.
+
+```bash
+roslaunch rplidar_ros rplidar.launch
+```
+
+If you get some error messages here, please refer to the last section
+
+### Run the vehicle
+
+Now it's time to run the vehicle!
+
+```bash
+python manage_modified.py drive
+```
+
+
 ## Notes
 
 ### Wrong date and time on Jetson
