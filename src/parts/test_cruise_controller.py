@@ -44,7 +44,7 @@ def _cruise_controller_test_helper(cruise_controller, distance_list):
     ax3.set_ylabel('error')
     ax3.plot(error_list)
 
-    plt.waitforbuttonpress(10)
+    plt.waitforbuttonpress(1)
     plt.draw()
     plt.close()
     return throttle_list, error_list
