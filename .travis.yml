@@ -49,12 +49,12 @@ python:
   - "3.7"
 matrix:
   include:
-  - name: "Xenial kinetic"
-    dist: xenial
-    env: ROS_DISTRO=kinetic
+#  - name: "Xenial kinetic"
+#    dist: xenial
+#    env: ROS_DISTRO=kinetic
   - name: "Bionic melodic"
     dist: bionic
-    env: ROS_DISTRO=melodic   #TODO aaaa
+    env: ROS_DISTRO=melodic
 
 # Configuration variables. All variables are global now, but this can be used to
 # trigger a build matrix for different ROS distributions if desired.
@@ -85,7 +85,7 @@ before_install:
 
 # Create a catkin workspace with the package under integration.
 install:
-  - pip install -r requirements.txt   #TODO
+  - pip3 install -r requirements.txt --user  # install python3 requirements
   - mkdir -p ~/catkin_ws/src
   - cd ~/catkin_ws/src
   - catkin_init_workspace
