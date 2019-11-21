@@ -18,7 +18,7 @@
 #     `wstool`, and should be listed in a file named dependencies.rosinstall.
 #
 
-# There are envioronment variables you may want to change, such as ROS_DISTRO,
+# There are environment variables you may want to change, such as ROS_DISTRO,
 # ROSINSTALL_FILE, and the CATKIN_OPTIONS file.  See the README.md for more
 # information on these flags, and
 # https://docs.travis-ci.com/user/environment-variables/ for information about
@@ -70,6 +70,7 @@ env:
 
 # Install system dependencies, namely a very barebones ROS setup.
 before_install:
+  - pip install -r requirements.txt  # install python3 requirements
   - sudo sh -c "echo \"deb http://packages.ros.org/ros/ubuntu $ROS_CI_DESKTOP main\" > /etc/apt/sources.list.d/ros-latest.list"
   - sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
   - sudo apt-get update -qq
@@ -86,7 +87,7 @@ install:
   - echo $PYTHONPATH
   - unset PYTHONPATH  # unset pythonpath may help?
   - pip list
-  - sudo pip3 install -r requirements.txt  # install python3 requirements
+  - pip install -r requirements.txt  # install python3 requirements
   - mkdir -p ~/catkin_ws/src
   - cd ~/catkin_ws/src
   - catkin_init_workspace
