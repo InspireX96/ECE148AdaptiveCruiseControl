@@ -6,7 +6,7 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 
-from cruise_controller import CruiseController
+from donkeyacc.parts.cruise_controller import CruiseController
 
 
 def _cruise_controller_test_helper(cruise_controller, distance_list):
