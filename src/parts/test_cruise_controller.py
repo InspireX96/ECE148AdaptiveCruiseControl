@@ -64,7 +64,11 @@ def test_cruise_controller_with_constant_default_distance():
     print('Throttle list: ', throttle_list)
     print('Error list: ', error_list)
 
-    # TODO: assert
+    assert np.min(throttle_list) >= cruise_controller.min_throttle
+    assert np.max(throttle_list) <= cruise_controller.max_throttle
+    assert abs(np.mean(error_list[1:])) <= 0.5
+    assert abs(error_list[-1]) <= 0.5
+    assert np.var(error_list[1:]) <= 1
 
 
 def test_cruise_controller_with_constant_non_default_distance():
@@ -80,13 +84,24 @@ def test_cruise_controller_with_constant_non_default_distance():
     print('Throttle list: ', throttle_list)
     print('Error list: ', error_list)
 
+    assert np.min(throttle_list) >= cruise_controller.min_throttle
+    assert np.max(throttle_list) <= cruise_controller.max_throttle
+    assert abs(np.mean(error_list[1:])) <= 0.5
+    assert abs(error_list[-1]) <= 0.5
+    assert np.var(error_list[1:]) <= 1
+
     cruise_controller = CruiseController(default_distance=default_distance)
 
     distance_list = [0.5 * default_distance] * int(1 / cruise_controller.time_step)
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list)
     print('Throttle list: ', throttle_list)
     print('Error list: ', error_list)
-    # TODO: assert
+
+    assert np.min(throttle_list) >= cruise_controller.min_throttle
+    assert np.max(throttle_list) <= cruise_controller.max_throttle
+    assert abs(np.mean(error_list[1:])) <= 0.5
+    assert abs(error_list[-1]) <= 0.5
+    assert np.var(error_list[1:]) <= 1
 
 
 def test_cruise_controller_with_increasing_to_default_distance():
@@ -104,6 +119,12 @@ def test_cruise_controller_with_increasing_to_default_distance():
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list)
     print('Throttle list: ', throttle_list)
     print('Error list: ', error_list)
+
+    assert np.min(throttle_list) >= cruise_controller.min_throttle
+    assert np.max(throttle_list) <= cruise_controller.max_throttle
+    assert abs(np.mean(error_list[1:])) <= 2
+    assert abs(error_list[-1]) <= 1
+    assert np.var(error_list[1:]) <= 2
 
 
 def test_cruise_controller_with_decreasing_to_default_distance():
@@ -123,6 +144,12 @@ def test_cruise_controller_with_decreasing_to_default_distance():
     print('Throttle list: ', throttle_list)
     print('Error list: ', error_list)
 
+    assert np.min(throttle_list) >= cruise_controller.min_throttle
+    assert np.max(throttle_list) <= cruise_controller.max_throttle
+    assert abs(np.mean(error_list[1:])) <= 2
+    assert abs(error_list[-1]) <= 1
+    assert np.var(error_list[1:]) <= 2
+
 
 def test_cruise_controller_with_constant_sin_wave_distance():
     """
@@ -138,7 +165,26 @@ def test_cruise_controller_with_constant_sin_wave_distance():
     print('Throttle list: ', throttle_list)
     print('Error list: ', error_list)
 
-    # TODO: assert
+    assert np.min(throttle_list) >= cruise_controller.min_throttle
+    assert np.max(throttle_list) <= cruise_controller.max_throttle
+    assert abs(np.mean(error_list[1:])) <= 2
+    assert abs(error_list[-1]) <= 1
+    assert np.var(error_list[1:]) <= 2
+
+
+def test_cruise_controller_set_throttle_scale():
+    """
+    Test cruise controller set throttle scale with random distance
+    """
+    print('\n===== Testing setting throttle scale with random distance =====\n')
+    default_distance = 0.5
+    for throttle_scale in [0.2, 0.5, 0.75]:
+        cruise_controller = CruiseController(default_distance=default_distance, throttle_scale=throttle_scale, debug=True)
+        distance_list = np.random.rand(int(1 / cruise_controller.time_step))
+
+        throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list)
+
+        assert np.max(np.abs(throttle_list)) <= throttle_scale
 
 
 if __name__ == '__main__':
@@ -148,4 +194,5 @@ if __name__ == '__main__':
     test_cruise_controller_with_increasing_to_default_distance()
     test_cruise_controller_with_decreasing_to_default_distance()
     test_cruise_controller_with_constant_sin_wave_distance()
+    test_cruise_controller_set_throttle_scale()
     print('All tests passed')
