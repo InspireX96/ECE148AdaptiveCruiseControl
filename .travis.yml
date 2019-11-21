@@ -82,7 +82,6 @@ before_install:
 
 # Create a catkin workspace with the package under integration.
 install:
-  - pip list
   - pip uninstall -y enum34   # remove this dumb package that causes issue
   - pip3 install -r requirements.txt --user  # install python3 requirements
   - mkdir -p ~/catkin_ws/src
