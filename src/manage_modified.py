@@ -75,7 +75,8 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
     V.add(lidar_processor, outputs=['lidar/distance'], threaded=False)
 
     # add cruise controller
-    cruise_controller = CruiseController(kp=1, kd=1.5, default_distance=0.5, debug=True)    # TODO: disable debug mode
+    cruise_controller = CruiseController(kp=1, kd=1.5, default_distance=0.5, throttle_scale=cfg.JOYSTICK_MAX_THROTTLE,
+                                         debug=True)  # TODO: disable debug mode
     V.add(cruise_controller, inputs=['lidar/distance'], outputs=['cc/throttle'])
 
     # TODO: autopilot

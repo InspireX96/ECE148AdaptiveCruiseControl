@@ -11,19 +11,22 @@ class CruiseController(object):
     The cruise controller takes distance as input and calculate throttle to keep distance constant
     """
 
-    def __init__(self, kp=1, kd=1.5, default_distance=0.5, debug=False):
+    def __init__(self, kp=1, kd=1.5, default_distance=0.5, throttle_scale=1, debug=False):
         """
         Constructor of CruiseController
         :param kp: float, proportional gain, defaults to 1
         :param kd: float, differential gain, defaults to 1.5
         :param default_distance: float, default distance to keep, defaults to 0.5 (m)
+        :param throttle_scale: float, scale factor of output throttle, normally defined in myconfig.py
         :param debug: bool, flag to turn on debug mode that prints out calculated distance
         """
+        # TODO: scale throttle based on config
         # controller parameters
         self.kp = kp
         self.kd = kd
         # controller settings
         self.default_distance = default_distance
+        self.throttle_scale = throttle_scale
         self.debug = debug
 
         self.throttle = 0
@@ -34,7 +37,7 @@ class CruiseController(object):
         self.throttle_change = 0.25
         self.error_high_threshold = 0.1
         self.error_low_threshold = -0.1
-        self.max_throttle = 1
+        self.max_throttle = 1   # TODO: change max throttle by user input
         self.min_throttle = -1
 
     def run(self, distance):
@@ -61,11 +64,11 @@ class CruiseController(object):
         self.last_distance = distance
         self.last_throttle = self.throttle
 
-        logging.info('output throttle: {}'.format(self.throttle))
+        logging.info('output throttle: {} * {} (scale)'.format(self.throttle, self.throttle_scale))
         if self.debug:
-            print('output throttle: {}'.format(self.throttle))
+            print('output throttle: {} * {} (scale)'.format(self.throttle, self.throttle_scale))
 
-        return self.throttle
+        return self.throttle * self.throttle_scale
 
     def shutdown(self):
         pass
