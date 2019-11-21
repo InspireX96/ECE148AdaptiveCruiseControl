@@ -7,8 +7,12 @@ import rospy
 import numpy as np
 from sensor_msgs.msg import LaserScan
 
-from lidar_filters import angular_bounds_filter, range_filter, TemporalMedianFilter
-from lidar_distance_calculator import calculate_closest_object_distance
+try:
+    from lidar_filters import angular_bounds_filter, range_filter, TemporalMedianFilter
+    from lidar_distance_calculator import calculate_closest_object_distance
+except ModuleNotFoundError:
+    from donkeycar.parts.lidar_filters import angular_bounds_filter, range_filter, TemporalMedianFilter
+    from donkeycar.parts.lidar_distance_calculator import calculate_closest_object_distance
 
 
 class LidarProcessor(object):
@@ -20,7 +24,7 @@ class LidarProcessor(object):
         return closest obstacle distance in front of the donkey car.
     """
 
-    def __init__(self, non_block=False):
+    def __init__(self, non_block=False, debug=False):
         """
         Constructor of LidarProcessor
         :param non_block: bool, flag to turn on non-block mode.
@@ -28,12 +32,17 @@ class LidarProcessor(object):
                               Once a new scan is received, it will calculate distance and return back.
                           If non_block=True, the processor will send back previous calculated distance while
                               waiting for a new LIDAR scan, hence it will not block the process.
+        :param debug: bool, flag to turn on debug mode that prints out calculated distance
         """
         self.non_block = non_block
+        self.debug = debug
+
         # init ROS node
-        rospy.init_node('lidar_processor', anonymous=True)
-        self.calculated_distance = 0
+        rospy.init_node('lidar_processor',
+                        anonymous=True, disable_signals=True)  # disable ROS signal so we can shutdown vehicle
+
         self.temporal_median_filter = TemporalMedianFilter(k=3)  # initialize temporal median filter
+        self.calculated_distance = 0
 
     def _get_lidar_scan(self):
         """
@@ -71,7 +80,6 @@ class LidarProcessor(object):
         """
         Run as a non-threaded script.
         Receive LIDAR scan, apply filters and calculate distance
-
         :return: float, calculated distance from LIDAR scan
         """
         scan = self._get_lidar_scan()
@@ -79,13 +87,21 @@ class LidarProcessor(object):
             self._apply_lidar_filters(scan)  # apply filters
             self.calculated_distance = calculate_closest_object_distance(scan)  # calculate distance
         # TODO: maybe try to smooth out distance in non block mode
+        if self.debug:
+            print('distance: {} (m)'.format(self.calculated_distance))
         return self.calculated_distance
 
-    def shutdown(self):
-        pass
+    @staticmethod
+    def shutdown():
+        """
+        Shutdown function
+        """
+        print('Shutting down LIDAR Processor')
+        rospy.signal_shutdown('Shutting down LIDAR subscriber')
 
 
 if __name__ == '__main__':
+    # TODO: we don't need stuff below
     # test LIDAR processor
     # test block mode
     lidar_processor = LidarProcessor()
