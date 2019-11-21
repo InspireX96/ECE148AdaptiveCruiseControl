@@ -61,9 +61,9 @@ class CruiseController(object):
         self.last_distance = distance
         self.last_throttle = self.throttle
 
-        logging.info('Output throttle: {}', self.throttle)
+        logging.info('output throttle: {}'.format(self.throttle))
         if self.debug:
-            print('Output throttle: {}', self.throttle)
+            print('output throttle: {}'.format(self.throttle))
 
         return self.throttle
 
