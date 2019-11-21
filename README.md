@@ -84,7 +84,7 @@ python manage_modified.py drive
 
 ## Disclaimer
 
-Travis CI with ROS utilizes code from [https://github.com/felixduvallet/ros-travis-integration.git](https://github.com/felixduvallet/ros-travis-integration.git)
+Travis CI with ROS utilizes `.travis.yml` from [https://github.com/felixduvallet/ros-travis-integration.git](https://github.com/felixduvallet/ros-travis-integration.git)
 
 ```
 Copyright (c) 2016, Felix Duvallet
