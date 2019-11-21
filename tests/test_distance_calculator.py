@@ -6,7 +6,7 @@ import time
 import numpy as np
 
 from sensor_msgs.msg import LaserScan
-from lidar_distance_calculator import calculate_closest_object_distance
+from donkeyacc.parts.lidar_distance_calculator import calculate_closest_object_distance
 
 
 def _toy_scan_initializer():

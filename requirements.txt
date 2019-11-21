@@ -1,4 +1,6 @@
 # required python packages besides existing packages in donkey
+numpy
+matplotlib
 pyyaml
 rospkg
 ipdb

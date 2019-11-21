@@ -3,7 +3,6 @@ A player to visualize LIDAR filters
 Please have LIDAR scan publisher ready before running this script
 """
 
-import copy
 import queue
 import threading
 import rospy

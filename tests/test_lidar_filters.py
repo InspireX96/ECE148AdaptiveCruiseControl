@@ -7,7 +7,7 @@ import numpy as np
 
 from sensor_msgs.msg import LaserScan
 
-from lidar_filters import angular_bounds_filter, range_filter, TemporalMedianFilter
+from donkeyacc.parts.lidar_filters import angular_bounds_filter, range_filter, TemporalMedianFilter
 
 
 def test_angular_bounds_filter():
