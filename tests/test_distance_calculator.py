@@ -4,6 +4,7 @@ Unit tests for LIDAR distance calculator
 
 import time
 import numpy as np
+import matplotlib.pyplot as plt
 
 from sensor_msgs.msg import LaserScan
 from donkeyacc.parts.lidar_distance_calculator import calculate_closest_object_distance
@@ -33,6 +34,24 @@ def _toy_scan_initializer():
     scan.intensities = [1] * num_readings
     return scan, num_readings
 
+def _distance_calculator_plot_helper(scan, distance):
+    """
+    Helper function to plot distance calculator result
+    :param scan: LaserScan msg, LIDAR scan data
+    :param distance: float, calculated distance
+    """
+    ranges = np.array(scan.ranges)
+    mask = np.logical_and(ranges >= 0, ranges < np.finfo(np.float64).max)
+    ranges = ranges[mask]
+
+    # plot
+    hist = plt.hist(ranges, bins='auto')
+    plt.plot([distance, distance], [0, np.max(hist[0])])
+    plt.title('Calculated Distance: {}'.format(distance))
+    plt.waitforbuttonpress(1)
+    plt.draw()
+    plt.close()
+
 
 def test_distance_calculator_with_constant_distance():
     """
@@ -44,8 +63,12 @@ def test_distance_calculator_with_constant_distance():
 
     print('sending scan range: ', scan.ranges)
     # test
-    distance = calculate_closest_object_distance(scan, debug=True)
+    distance = calculate_closest_object_distance(scan)
     print("Got distance: ", distance)
+
+    # plot
+    _distance_calculator_plot_helper(scan, distance)
+
     assert distance == 1
 
 
@@ -59,8 +82,12 @@ def test_distance_calculator_with_binary_valued_distance():
 
     print('sending scan range: ', scan.ranges)
     # test
-    distance = calculate_closest_object_distance(scan, debug=True)
+    distance = calculate_closest_object_distance(scan)
     print("Got distance: ", distance)
+
+    # plot
+    _distance_calculator_plot_helper(scan, distance)
+
     assert distance == 1
 
 
@@ -74,8 +101,12 @@ def test_distance_calculator_with_uniform_sampled_distance():
 
     print('sending scan range: ', scan.ranges)
     # test
-    distance = calculate_closest_object_distance(scan, debug=True)
+    distance = calculate_closest_object_distance(scan)
     print("Got distance: ", distance)
+
+    # plot
+    _distance_calculator_plot_helper(scan, distance)
+
     assert 0.5 < distance <= 0.75
 
 
@@ -89,8 +120,12 @@ def test_distance_calculator_with_gaussian_sampled_distance():
 
     print('sending scan range: ', scan.ranges)
     # test
-    distance = calculate_closest_object_distance(scan, debug=True)
+    distance = calculate_closest_object_distance(scan)
     print("Got distance: ", distance)
+
+    # plot
+    _distance_calculator_plot_helper(scan, distance)
+
     assert 0.65 < distance <= 0.9
 
 
@@ -104,8 +139,12 @@ def test_distance_calculator_with_inverse_gaussian_sampled_distance():
 
     print('sending scan range: ', scan.ranges)
     # test
-    distance = calculate_closest_object_distance(scan, debug=True)
+    distance = calculate_closest_object_distance(scan)
     print("Got distance: ", distance)
+
+    # plot
+    _distance_calculator_plot_helper(scan, distance)
+
     assert 0 < distance <= 0.5
 
 
@@ -119,8 +158,12 @@ def test_distance_calculator_with_invalid_distance():
 
     print('sending scan range: ', scan.ranges)
     # test
-    distance = calculate_closest_object_distance(scan, debug=True)
+    distance = calculate_closest_object_distance(scan)
     print("Got distance: ", distance)
+
+    # plot
+    _distance_calculator_plot_helper(scan, distance)
+
     assert 0 < + distance < np.inf
 
 
@@ -150,7 +193,7 @@ def test_distance_calculator_stress_test():
         scan.ranges.append(i)  # fake data
         scan.intensities.append(1)  # fake data
 
-    # angular bounds filter speed test
+    # distance calculator filter speed test
     time_start = time.time()
     for i in range(100):
         calculate_closest_object_distance(scan)

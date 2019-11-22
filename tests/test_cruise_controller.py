@@ -195,6 +195,8 @@ def test_cruise_controller_stress_test():
     print('\n====== Stress test ======\n')
     cruise_controller = CruiseController()
     distance_mat = np.random.random((100, int(1 / cruise_controller.time_step)))
+    
+    # speed test
     time_start = time.time()
     for i, distance_list in enumerate(distance_mat):
         for distance in distance_list:
