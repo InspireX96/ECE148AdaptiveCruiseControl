@@ -25,7 +25,7 @@ class CruiseController(object):
         # TODO: scale throttle based on config
         # controller parameters
         self.kp = kp
-        self.kd = kd
+        self.kd = kd    # TODO: kd may be too high
         # controller settings
         self.default_distance = default_distance
         self.throttle_scale = throttle_scale
@@ -36,7 +36,7 @@ class CruiseController(object):
         self.last_distance = 0
         self.time_step = 0.05
         self.error = 0
-        self.throttle_change = 0.25
+        self.throttle_change = 0.25     # TODO: maybe tune down this?
         self.error_high_threshold = 0.1
         self.error_low_threshold = -0.1
         self.max_throttle = 1   # TODO: change max throttle by user input
@@ -46,6 +46,7 @@ class CruiseController(object):
         """
         Run as a non-threaded script.
         Input distance, output throttle
+        NOTE: increase max throttle setting by giving positive user_throttle input and vice versa
 
         :param distance: float, distance
         :param user_throttle: user input throttle to adjust controller, defaults to None
@@ -54,7 +55,16 @@ class CruiseController(object):
         # calculate distance error using PD controller
         # TODO: set timer
         if user_throttle is not None:
-            print('user_throttle: ', user_throttle)  # TODO: delete
+            # change max throttle limit according to user throttle input
+            if user_throttle > 0.25 * self.throttle_scale and self.max_throttle + self.throttle_change <= 1:
+                self.max_throttle += self.throttle_change
+                print('Cruise control max throttle increased {} to {}'.format(self.throttle_change, self.max_throttle))
+            elif user_throttle < -0.25 * self.throttle_scale and self.max_throttle - self.throttle_change >= self.min_throttle:
+                self.max_throttle -= self.throttle_change
+                print('Cruise control max throttle decreased {} to {}'.format(self.throttle_change, self.max_throttle))
+            else:
+                print('Cannot change cruise control max throttle')
+                
         self.error = self.kp * (distance - self.default_distance) + self.kd * (distance -
                                                                                self.last_distance) / self.time_step
 
