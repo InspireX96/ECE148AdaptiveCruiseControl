@@ -217,13 +217,13 @@ def test_cruise_controller_change_max_throttle():
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list)
     assert cruise_controller.min_throttle == -1
     assert cruise_controller.min_throttle <= cruise_controller.max_throttle < 0
-    assert np.max(throttle_list) <= cruise_controller.max_throttle
+    assert throttle_list[-1] <= cruise_controller.max_throttle
 
     # random user throttle
     user_throttle_list = 2 * np.random.rand(len(distance_list)) - 1
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list)
     assert cruise_controller.max_throttle <= 1
-    assert np.max(throttle_list) <= cruise_controller.max_throttle
+    assert throttle_list[-1] <= cruise_controller.max_throttle
 
 
 def test_cruise_controller_stress_test():
