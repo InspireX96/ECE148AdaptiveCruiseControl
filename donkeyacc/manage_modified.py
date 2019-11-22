@@ -94,7 +94,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
             # TODO: add adaptive CC throttle here
             # NOTE: pilot_throttle is now handled by ACC
             if mode == 'user':
-                print('Using user angle and throttle')
+                print('Using user angle and throttle')  # TODO: delete this
                 return user_angle, user_throttle
 
             elif mode == 'local_angle':

@@ -2,7 +2,7 @@
 Calculate closed object distance from LIDAR scans
 """
 import numpy as np
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # TODO: remove matplotlib, put it in tests
 
 
 def calculate_closest_object_distance(scan, debug=False):
