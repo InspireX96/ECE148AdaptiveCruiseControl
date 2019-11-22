@@ -1,4 +1,6 @@
-"""Adaptive Cruise Controller"""
+"""
+Adaptive Cruise Controller
+"""
 
 import logging
 import numpy as np

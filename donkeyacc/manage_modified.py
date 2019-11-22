@@ -86,19 +86,16 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
         """
         Change different drive modes: manual, adaptive CC, autopilot, etc...
         """
-
-        # TODO: change drive mode and controller.py
         def run(self, mode,
                 user_angle, user_throttle,
                 pilot_angle, pilot_throttle):
-            # TODO: add adaptive CC throttle here
             # NOTE: pilot_throttle is now handled by ACC
             if mode == 'user':
-                print('Using user angle and throttle')  # TODO: delete this
+                # using user angle and throttle
                 return user_angle, user_throttle
 
             elif mode == 'local_angle':
-                print('Using user angle and ACC throttle')
+                # using user angle and ACC throttle
                 return user_angle, pilot_throttle
 
             else:

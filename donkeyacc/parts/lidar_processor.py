@@ -98,23 +98,3 @@ class LidarProcessor(object):
         """
         print('Shutting down LIDAR Processor')
         rospy.signal_shutdown('Shutting down LIDAR subscriber')
-
-
-if __name__ == '__main__':
-    # TODO: we don't need stuff below
-    # test LIDAR processor
-    # test block mode
-    lidar_processor = LidarProcessor()
-    for _ in range(100):
-        time_start = time.time()
-        distance = lidar_processor.run()
-        time_elapsed = time.time() - time_start
-        print('Distance: {}, elapsed time: {}, fps: {}'.format(distance, time_elapsed, 1 / time_elapsed))
-
-    # test non block mode
-    lidar_processor = LidarProcessor(non_block=True)
-    for _ in range(100):
-        time_start = time.time()
-        distance = lidar_processor.run()
-        time_elapsed = time.time() - time_start
-        print('Distance: {}, elapsed time: {}, fps: {}'.format(distance, time_elapsed, 1 / time_elapsed))

@@ -1,6 +1,7 @@
 """
 Calculate closed object distance from LIDAR scans
 """
+
 import numpy as np
 
 def calculate_closest_object_distance(scan):
