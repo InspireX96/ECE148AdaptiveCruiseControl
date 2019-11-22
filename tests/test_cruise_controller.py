@@ -198,21 +198,30 @@ def test_cruise_controller_change_max_throttle():
     """
     print('\n===== Testing changing max throttle with random distance =====\n')
     default_distance = 0.5
-    cruise_controller = CruiseController(default_distance=default_distance, throttle_scale=throttle_scale,
-                                         debug=True)
+    cruise_controller = CruiseController(default_distance=default_distance, debug=True)
     distance_list = np.random.rand(int(1 / cruise_controller.time_step))
+
+    # zero user throttle
     user_throttle_list = np.zeros(len(distance_list))
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list)
     assert np.max(np.abs(throttle_list)) <= 1
 
+    # always positive user throttle
     user_throttle_list = np.ones(len(distance_list))
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list)
     assert cruise_controller.max_throttle <= 1
     assert np.max(np.abs(throttle_list)) <= cruise_controller.max_throttle
 
+    # always negative user throttle
     user_throttle_list = - np.ones(len(distance_list))
     throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list)
     assert 0 <= cruise_controller.max_throttle < 0.5
+    assert np.max(np.abs(throttle_list)) <= cruise_controller.max_throttle
+
+    # random user throttle
+    user_throttle_list = 2 * np.random.rand(len(distance_list)) - 1
+    throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list)
+    assert cruise_controller.max_throttle <= 1
     assert np.max(np.abs(throttle_list)) <= cruise_controller.max_throttle
 
 
