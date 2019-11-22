@@ -159,6 +159,13 @@ Alternatively, you can run this command instead:
 roslaunch rplidar_ros view_rplidar.launch
 ```
 
+### Python3 cannot import rospkg
+
+```
+sudo apt-get install python3-pip python3-yaml
+sudo pip3 install rospkg catkin_pkg
+```
+
 ## Disclaimer
 
 Travis CI with ROS utilizes `.travis.yml` sections from from [https://github.com/felixduvallet/ros-travis-integration.git](https://github.com/felixduvallet/ros-travis-integration.git)
