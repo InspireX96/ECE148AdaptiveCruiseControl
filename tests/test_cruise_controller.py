@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from donkeyacc.parts.cruise_controller import CruiseController
 
 
-def _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list=None):
+def _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list=None, time_interval=0):
     """
     Helper function for cruise controller unit test
     Test cruise controller using given distance and plot
@@ -17,6 +17,7 @@ def _cruise_controller_test_helper(cruise_controller, distance_list, user_thrott
     :param cruise_controller: object, CruiseController object
     :param distance_list: array-like, list of distances
     :param user_throttle_list: array-like, list of user throttle, will not use when it is None
+    :param time_interval: float, time interval between each input, defaults to 0
     :returns: list of throttle and error
     """
     throttle_list = []
@@ -29,6 +30,8 @@ def _cruise_controller_test_helper(cruise_controller, distance_list, user_thrott
         throttle_list.append(throttle)
         error = cruise_controller.error
         error_list.append(error)
+        if time_interval:
+            time.sleep(time_interval)
 
     fig, (ax1, ax3) = plt.subplots(1, 2)
     color = 'tab:red'
@@ -199,31 +202,44 @@ def test_cruise_controller_change_max_throttle():
     print('\n===== Testing changing max throttle with random distance =====\n')
     default_distance = 0.5
     cruise_controller = CruiseController(default_distance=default_distance, debug=True)
+    cruise_controller.sleep_time_change_max_throttle = 0.1  # set this for fast test
     distance_list = np.random.rand(int(1 / cruise_controller.time_step))
 
     # zero user throttle
     user_throttle_list = np.zeros(len(distance_list))
-    throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list)
+    throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list,
+                                                               time_interval=0.12)
     assert np.max(throttle_list) <= 1
 
     # always positive user throttle
     user_throttle_list = np.ones(len(distance_list))
-    throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list)
+    throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list,
+                                                               time_interval=0.12)
     assert cruise_controller.max_throttle <= 1
     assert np.max(throttle_list) <= cruise_controller.max_throttle
 
     # always negative user throttle
     user_throttle_list = - np.ones(len(distance_list))
-    throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list)
+    throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list,
+                                                               time_interval=0.12)
     assert cruise_controller.min_throttle == -1
     assert cruise_controller.min_throttle <= cruise_controller.max_throttle < 0
     assert throttle_list[-1] <= cruise_controller.max_throttle
 
     # random user throttle
     user_throttle_list = 2 * np.random.rand(len(distance_list)) - 1
-    throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list)
+    throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list,
+                                                               time_interval=0.12)
     assert cruise_controller.max_throttle <= 1
     assert throttle_list[-1] <= cruise_controller.max_throttle
+
+    # user throttle input too fast
+    old_max_throttle = throttle_list[-1]
+    user_throttle_list = 2 * np.random.rand(len(distance_list)) - 1
+    throttle_list, error_list = _cruise_controller_test_helper(cruise_controller, distance_list, user_throttle_list,
+                                                               time_interval=0)
+    assert cruise_controller.max_throttle <= 1
+    assert np.abs(throttle_list[-1] - old_max_throttle) <= 2 * cruise_controller.throttle_change
 
 
 def test_cruise_controller_stress_test():
@@ -233,7 +249,7 @@ def test_cruise_controller_stress_test():
     print('\n====== Stress test ======\n')
     cruise_controller = CruiseController()
     distance_mat = np.random.random((100, int(1 / cruise_controller.time_step)))
-    
+
     # speed test
     time_start = time.time()
     for i, distance_list in enumerate(distance_mat):
@@ -252,6 +268,6 @@ if __name__ == '__main__':
     test_cruise_controller_with_decreasing_to_default_distance()
     test_cruise_controller_with_constant_sin_wave_distance()
     test_cruise_controller_set_throttle_scale()
+    test_cruise_controller_change_max_throttle()
     test_cruise_controller_stress_test()
     print('All tests passed')
-
