@@ -4,7 +4,8 @@ Before running this script, please ensure that Darknet YOLO is installed in ~/pr
 Please refer to README.md for installation guide
 """
 
-import os
+import os, sys
+import logging
 import time
 import threading
 from multiprocessing.pool import ThreadPool
@@ -22,7 +23,7 @@ class YoloProcessor(object):
     This processor will get an input image from donkey framework, save it in a temp folder and user YOLO to detect
     """
 
-    def __init__(self, use_tiny_yolo=True, non_block=True, debug=False):
+    def __init__(self, use_tiny_yolo=True, non_block=True, warning=True, debug=False):
         """
         Constructor of YOLOProcessor
         :param use_tiny_yolo: bool, flag to use tiny YOLO
@@ -31,10 +32,12 @@ class YoloProcessor(object):
                               Once YOLO detection is completed, it will return back.
                           If non_block=True, the processor will send back previous YOLO detection result while
                               waiting for a new YOLO detection, hence it will not block the process.
+        :param warning: bool, flag to turn on warning to user if person/stop sign etc is detected
         :param debug: bool, flag to turn on debug mode that prints out YOLO detection result
         """
         self.use_tiny_yolo = use_tiny_yolo
         self.non_block = non_block
+        self.warning = warning
         self.debug = debug
         print('Initializing YOLO Processor, use_tiny_yolo: {}'.format(use_tiny_yolo))
 
@@ -149,6 +152,11 @@ class YoloProcessor(object):
 
             if self.debug:
                 print('YOLO result: {}'.format(self.result))
+            if self.warning:
+                if 'stop sign' in self.result.keys():
+                    logging.warning('STOP SIGN Detected!')
+                if 'person' in self.result.keys():
+                    logging.warning('PERSON Detected!')
 
         if self.non_block:
             return self.result

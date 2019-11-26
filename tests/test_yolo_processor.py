@@ -49,6 +49,15 @@ def test_integration_test():
     output = processor.run(img_array)
     assert 'stop sign' in output.keys()
 
+    try:
+        img_array = np.array(Image.open((os.getcwd() + '/dataset/person,jpg')))
+    except FileNotFoundError:
+        img_array = np.array(Image.open((os.getcwd() + '/tests/dataset/person.jpg')))
+
+    # test YOLO
+    output = processor.run(img_array)
+    assert 'person' in output.keys()
+
 
 @pytest.mark.skip(reason='Do not test YOLO automatically')
 def test_block_mode():
@@ -59,9 +68,9 @@ def test_block_mode():
     processor = YoloProcessor(use_tiny_yolo=True, non_block=False, debug=True)
 
     try:
-        img_array = np.array(Image.open((os.getcwd() + '/dataset/stop_sign,jpg')))
+        img_array = np.array(Image.open((os.getcwd() + '/dataset/person,jpg')))
     except FileNotFoundError:
-        img_array = np.array(Image.open((os.getcwd() + '/tests/dataset/stop_sign.jpg')))
+        img_array = np.array(Image.open((os.getcwd() + '/tests/dataset/person.jpg')))
 
     output_list = []
     time_start = time.time()
