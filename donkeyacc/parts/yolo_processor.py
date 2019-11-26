@@ -123,7 +123,7 @@ class YoloProcessor(object):
             yolo_weights = 'yolov3.weights'
 
         command = ['./darknet', 'detect', yolo_cfg, yolo_weights, image_name]
-        output = subprocess.check_output(command)
+        output = subprocess.check_output(command, stderr=subprocess.DEVNULL)
 
         if self.debug:
             print('YOLO output: {}'.format(output))

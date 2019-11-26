@@ -107,7 +107,7 @@ def test_non_block_mode():
     elapsed_time = time.time() - time_start
     print(output_list)
     print('Elapsed time: ', elapsed_time)
-    assert elapsed_time < 10
+    assert 3 < elapsed_time < 10
 
 
 if __name__ == '__main__':
