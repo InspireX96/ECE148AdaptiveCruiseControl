@@ -34,6 +34,7 @@ def _toy_scan_initializer():
     scan.intensities = [1] * num_readings
     return scan, num_readings
 
+
 def _distance_calculator_plot_helper(scan, distance):
     """
     Helper function to plot distance calculator result
@@ -126,7 +127,7 @@ def test_distance_calculator_with_gaussian_sampled_distance():
     # plot
     _distance_calculator_plot_helper(scan, distance)
 
-    assert 0.65 < distance <= 0.9
+    assert 0.6 < distance <= 0.9
 
 
 def test_distance_calculator_with_inverse_gaussian_sampled_distance():
@@ -199,7 +200,8 @@ def test_distance_calculator_stress_test():
         calculate_closest_object_distance(scan)
     time_end = time.time()
     print('*** Distance calculator run time: {} sec over {} runs, FPS = {} ***'.format(time_end - time_start, i + 1,
-          ((i + 1) / (time_end - time_start))))
+                                                                                       ((i + 1) / (
+                                                                                                   time_end - time_start))))
 
 
 if __name__ == '__main__':

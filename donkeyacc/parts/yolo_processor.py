@@ -4,7 +4,7 @@ Before running this script, please ensure that Darknet YOLO is installed in ~/pr
 Please refer to README.md for installation guide
 """
 
-import os, sys
+import os
 import logging
 import time
 import threading
