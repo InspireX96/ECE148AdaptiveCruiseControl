@@ -293,7 +293,9 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
     # add cruise controller
     # NOTE: using part from donkeyacc
-    cruise_controller = CruiseController(kp=1, kd=1.5, default_distance=0.5, throttle_scale=cfg.JOYSTICK_MAX_THROTTLE,
+    cruise_controller = CruiseController(kp=1, kd=1.5, default_distance=0.5,
+                                         throttle_scale=cfg.JOYSTICK_MAX_THROTTLE,
+                                         max_throttle=0.5,
                                          debug=True)  # TODO: disable debug mode
     V.add(cruise_controller, inputs=['lidar/distance', 'user/throttle'], outputs=['acc/throttle'], threaded=False)
 

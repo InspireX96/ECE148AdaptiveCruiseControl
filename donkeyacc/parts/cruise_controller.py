@@ -14,7 +14,7 @@ class CruiseController(object):
     The cruise controller takes distance as input and calculate throttle to keep distance constant
     """
 
-    def __init__(self, kp=1.0, kd=1.5, default_distance=0.5, throttle_scale=1.0, max_throttle=1, debug=False):
+    def __init__(self, kp=1.0, kd=1.5, default_distance=0.5, throttle_scale=1.0, max_throttle=1.0, debug=False):
         """
         Constructor of CruiseController
         :param kp: float, proportional gain, defaults to 1
