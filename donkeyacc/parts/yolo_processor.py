@@ -5,11 +5,15 @@ Please refer to README.md for installation guide
 """
 
 import os
+import time
+import threading
+from multiprocessing.pool import ThreadPool
 import glob
 import shutil
 import subprocess
 from PIL import Image
 import numpy as np
+
 
 class YoloProcessor(object):
     """
@@ -51,6 +55,7 @@ class YoloProcessor(object):
         print('Making folder: {}'.format(self.yolo_data_path))
         os.mkdir(self.yolo_data_path)
 
+        self.result = {}
         self.counter = 0
         # flag
         self.is_running = False
@@ -76,34 +81,6 @@ class YoloProcessor(object):
             print('Found latest image: {}'.format(image_name))
         return image_name
 
-    def _run_yolo(self):
-        """
-        Run YOLO to detect latest image in yolo_data
-        :return: str, stdout of yolo.
-                 Example: '<image>: Predicted in 0.617665 seconds.\nstop sign: 100%\nstop sign: 55%\n'
-        """
-        # change path to solve YOLO path problem
-        old_path = os.getcwd()
-        os.chdir(self.darknet_path)
-
-        image_name = self._find_latest_image_name()     # find latest image
-
-        if self.use_tiny_yolo:
-            yolo_cfg = 'cfg/yolov3-tiny.cfg'
-            yolo_weights = 'yolov3-tiny.weights'
-        else:
-            yolo_cfg = 'cfg/yolov3.cfg'
-            yolo_weights = 'yolov3.weights'
-
-        command = ['./darknet', 'detect', yolo_cfg, yolo_weights, image_name]
-        output = subprocess.check_output(command)
-
-        if self.debug:
-            print('YOLO output: {}'.format(output))
-
-        os.chdir(old_path)
-        return output.decode()
-
     @staticmethod
     def _parse_yolo_output(yolo_output):
         """
@@ -123,6 +100,38 @@ class YoloProcessor(object):
 
         return result
 
+    def _run_yolo(self):
+        """
+        Run YOLO to detect latest image in yolo_data
+        :return: str, stdout of yolo.
+                 Example: '<image>: Predicted in 0.617665 seconds.\nstop sign: 100%\nstop sign: 55%\n'
+        """
+        # change path to solve YOLO path problem
+        old_path = os.getcwd()
+        os.chdir(self.darknet_path)
+
+        image_name = self._find_latest_image_name()  # find latest image
+
+        if self.use_tiny_yolo:
+            yolo_cfg = 'cfg/yolov3-tiny.cfg'
+            yolo_weights = 'yolov3-tiny.weights'
+        else:
+            yolo_cfg = 'cfg/yolov3.cfg'
+            yolo_weights = 'yolov3.weights'
+
+        command = ['./darknet', 'detect', yolo_cfg, yolo_weights, image_name]
+        output = subprocess.check_output(command)
+
+        if self.debug:
+            print('YOLO output: {}'.format(output))
+
+        os.chdir(old_path)  # change back working dir
+
+        # parse result
+        self.result = self._parse_yolo_output(output.decode())
+
+        self.is_running = False
+
     def run(self, image):
         """
         :param image: np ndarray, image
@@ -130,18 +139,21 @@ class YoloProcessor(object):
                        values are corresponding confidence (float, 0~1)
         """
         # TODO: multi thread and non blocking
-        self._save_image(image)     # save img
-        yolo_output = self._run_yolo()    # run YOLO
-        result = self._parse_yolo_output(yolo_output)   # get result
+        if not self.is_running:
+            self.is_running = True
+            self._save_image(image)  # save img
 
-        if self.debug:
-            print('YOLO result: {}'.format(result))
+            pool = ThreadPool(processes=1)
+            t = threading.Thread(target=self._run_yolo)  # run YOLO
+            t.start()
 
-        return result
+            if self.debug:
+                print('YOLO result: {}'.format(self.result))
 
+        if self.non_block:
+            return self.result
+        else:
+            while self.is_running:
+                time.sleep(0.02)
 
-
-
-
-
-
+        return self.result
