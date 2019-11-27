@@ -296,6 +296,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
     cruise_controller = CruiseController(kp=1, kd=0.8, default_distance=0.5,
                                          throttle_scale=cfg.JOYSTICK_MAX_THROTTLE,
                                          max_throttle=0.75,
+                                         use_timer=True
                                          debug=True)  # TODO: disable debug mode
     V.add(cruise_controller, inputs=['lidar/distance', 'user/throttle'], outputs=['acc/throttle'], threaded=False)
 
