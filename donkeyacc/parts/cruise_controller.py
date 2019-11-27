@@ -81,7 +81,7 @@ class CruiseController(object):
         """
         # calculate distance error using PD controller
         # TODO: set timer
-        self._change_max_throttle(user_throttle)  # change max throttle according to user throttle input
+        # self._change_max_throttle(user_throttle)  # change max throttle according to user throttle input
 
         self.error = self.kp * (distance - self.default_distance) + self.kd * (distance -
                                                                                self.last_distance) / self.time_step
