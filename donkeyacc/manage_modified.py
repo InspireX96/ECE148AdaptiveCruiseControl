@@ -24,6 +24,7 @@ from donkeycar.parts.actuator import PCA9685, PWMSteering, PWMThrottle
 
 from donkeycar.parts.lidar_processor import LidarProcessor
 from donkeycar.parts.cruise_controller import CruiseController
+from donkeycar.parts.yolo_processor import YoloProcessor
 from donkeycar.utils import *
 
 
@@ -301,8 +302,8 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
     V.add(cruise_controller, inputs=['lidar/distance', 'user/throttle'], outputs=['acc/throttle'], threaded=False)
 
     # TODO: YOLO detection
-    # TODO: autopilot
-    # TODO: load model
+    yolo_processor = YoloProcessor(non_block=True, warning=True, debug=True)    # TODO: disable debug mode
+    V.add(yolo_processor, inputs=['cam/image_array'], outputs=['yolo/detection'], threaded=False)
 
     class DriveMode:
         """
