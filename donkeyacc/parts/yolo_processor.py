@@ -142,6 +142,9 @@ class YoloProcessor(object):
                        values are corresponding confidence (float, 0~1)
         """
         # TODO: multi thread and non blocking
+        if not image:
+            logging.warning('No input image to YOLO processor')
+            return self.result
         if not self.is_running:
             self.is_running = True
             self._save_image(image)  # save img
