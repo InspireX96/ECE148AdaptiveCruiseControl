@@ -40,8 +40,8 @@ class CruiseController(object):
         self.time_step = 0.05
         self.error = 0
         self.throttle_change = 0.25  # TODO: maybe tune down this?
-        self.error_high_threshold = 0.1
-        self.error_low_threshold = -0.1
+        self.error_high_threshold = 0.05
+        self.error_low_threshold = -0.05
         self.max_throttle = max_throttle
         self.min_throttle = -1
 
