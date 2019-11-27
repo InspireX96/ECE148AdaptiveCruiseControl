@@ -58,10 +58,10 @@ class CruiseController(object):
         if user_throttle is not None and (
                 time.time() - self.timer_change_max_throttle) > self.sleep_time_change_max_throttle:
             # change max throttle limit according to user throttle input
-            if user_throttle > 0.25 * self.throttle_scale and self.max_throttle + self.throttle_change <= 1:
+            if user_throttle > 0.8 * self.throttle_scale and self.max_throttle + self.throttle_change <= 1:
                 self.max_throttle += self.throttle_change
                 print('Cruise control max throttle increased {} to {}'.format(self.throttle_change, self.max_throttle))
-            elif user_throttle < -0.25 * self.throttle_scale and \
+            elif user_throttle < -0.8 * self.throttle_scale and \
                     self.max_throttle - self.throttle_change >= self.min_throttle:
                 self.max_throttle -= self.throttle_change
                 print('Cruise control max throttle decreased {} to {}'.format(self.throttle_change, self.max_throttle))
