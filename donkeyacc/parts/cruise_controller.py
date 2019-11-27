@@ -14,7 +14,7 @@ class CruiseController(object):
     The cruise controller takes distance as input and calculate throttle to keep distance constant
     """
 
-    def __init__(self, kp=1.0, kd=1.5, default_distance=0.5, throttle_scale=1.0, max_throttle=1.0, use_timer=False, debug=False):
+    def __init__(self, kp=1.0, kd=1.5, default_distance=0.5, throttle_scale=1.0, max_throttle=1.0, time_step=0.05, use_timer=False, debug=False):
         """
         Constructor of CruiseController
         :param kp: float, proportional gain, defaults to 1
@@ -23,6 +23,7 @@ class CruiseController(object):
         :param throttle_scale: float, scale factor of output throttle, normally defined in myconfig.py
         :param max_throttle: float (-1~1), initial maximum throttle, defaults to 1.0,
                              can be changed by user input later on
+        :param time_step: float, time step (sec), defaults to 0.5
         :param use_timer: bool, flag to use a timer to calculate time step instead of setting a constant value
         :param debug: bool, flag to turn on debug mode that prints out calculated distance
         """
@@ -33,13 +34,13 @@ class CruiseController(object):
         # controller settings
         self.default_distance = default_distance
         self.throttle_scale = throttle_scale
+        self.time_step = time_step
         self.use_timer = use_timer
         self.debug = debug
 
         self.throttle = 0
         self.last_throttle = 0
         self.last_distance = 0
-        self.time_step = 0.05
         self.error = 0
         self.throttle_change = 0.25  # TODO: maybe tune down this?
         self.error_high_threshold = 0.05
