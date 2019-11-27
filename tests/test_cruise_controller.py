@@ -3,6 +3,7 @@ Unit tests for Cruise Controller
 """
 
 import time
+import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -195,6 +196,7 @@ def test_cruise_controller_set_throttle_scale():
         assert np.max(np.abs(throttle_list)) <= throttle_scale
 
 
+@pytest.mark.skip(reason='chang max throttle function depreciated')
 def test_cruise_controller_change_max_throttle():
     """
     Test cruise controller change max throttle with random distance
