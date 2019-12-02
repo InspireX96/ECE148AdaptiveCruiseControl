@@ -92,6 +92,10 @@ cd ~/projects/d3
 python manage_modified.py drive
 ```
 
+### Autopilot
+
+Autopilot feature is preserved in `manage_modified.py`. Usage is the same as the original `manage.py`. Please refer to the original donkey framework for more information.
+
 #### Different drive modes
 
 There are three drive modes to select:
@@ -184,9 +188,20 @@ sudo apt-get install python3-pip python3-yaml
 sudo pip3 install rospkg catkin_pkg
 ```
 
-## Disclaimer
+## Reference
 
 This project is intended to be used within the donkey car framework [https://github.com/autorope/donkeycar.git](https://github.com/autorope/donkeycar.git)
+
+Object detection utilizes YOLO:
+
+```
+@article{yolov3,
+  title={YOLOv3: An Incremental Improvement},
+  author={Redmon, Joseph and Farhadi, Ali},
+  journal = {arXiv},
+  year={2018}
+}
+```
 
 Travis CI with ROS utilizes `.travis.yml` sections from from [https://github.com/felixduvallet/ros-travis-integration.git](https://github.com/felixduvallet/ros-travis-integration.git)
 
