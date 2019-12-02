@@ -37,6 +37,16 @@ cd ~/catkin_ws
 catkin_make
 ```
 
+### Install YOLO
+
+This project uses YOLO for pedestrain and traffic sign detection. Please install YOLO under `projects/d3` following the instruction:
+
+[https://pjreddie.com/darknet/install/](https://pjreddie.com/darknet/install/)
+
+Make sure to download pretrained YOLO weights. For more information please refer to:
+
+[https://pjreddie.com/darknet/yolo/](https://pjreddie.com/darknet/yolo/)
+
 ## Run the Codes
 
 ### Clone this repo
@@ -81,6 +91,14 @@ Now it's time to run the vehicle!
 cd ~/projects/d3
 python manage_modified.py drive
 ```
+
+#### Different drive modes
+
+There are three drive modes to select:
+
+1. Manual steering and throttle
+2. Manual steering and adaptive cruise control throttle
+3. AI steering and adaptive cruise control throttle
 
 ## LIDAR Filter Player App
 
