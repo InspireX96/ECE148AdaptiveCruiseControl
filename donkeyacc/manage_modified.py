@@ -289,16 +289,16 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
     # add LIDAR stuff
     # NOTE: using part from donkeyacc
-    lidar_processor = LidarProcessor(non_block=False, debug=True)  # use non-block mode for more fps
+    lidar_processor = LidarProcessor(non_block=True, debug=False)  # use non-block mode for more fps
     V.add(lidar_processor, outputs=['lidar/distance'], threaded=False)
 
     # add cruise controller
     # NOTE: using part from donkeyacc
-    cruise_controller = CruiseController(kp=1, kd=0.8, default_distance=0.5,
+    cruise_controller = CruiseController(kp=1, kd=0.8, default_distance=1.0,
                                          throttle_scale=cfg.JOYSTICK_MAX_THROTTLE,
                                          max_throttle=0.75,
                                          use_timer=True,
-                                         debug=True)  # TODO: disable debug mode
+                                         debug=False)
     V.add(cruise_controller, inputs=['lidar/distance', 'user/throttle'], outputs=['acc/throttle'], threaded=False)
 
     # TODO: YOLO detection
