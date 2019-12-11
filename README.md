@@ -1,6 +1,8 @@
 # ECE148 Adaptive Cruise Control [![Build Status](https://travis-ci.org/InspireX96/ECE148AdaptiveCruiseControl.svg?branch=master)](https://travis-ci.org/InspireX96/ECE148AdaptiveCruiseControl)
 
-ECE 148 FA19 Team 7 Project: adaptive cruise control on autonomous driving RC car.
+ECE/MAE 148 FA19 Team 7 Project: adaptive cruise control on autonomous driving RC car.
+
+Please checkout our wiki page for more information: [https://guitar.ucsd.edu/maeece148/index.php/2019FallTeam7#References](https://guitar.ucsd.edu/maeece148/index.php/2019FallTeam7#References)
 
 ## Get Started
 
